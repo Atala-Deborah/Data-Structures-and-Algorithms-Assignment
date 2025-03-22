@@ -61,3 +61,34 @@ def tsp(mask, pos):
     parent[mask][pos] = next_city
     return min_cost
 
+def print_tour():
+    """
+    Function to reconstruct and print the optimal tour from the parent table.
+    """
+    mask, pos = 1, 0  # Start at city 0 (represented as bit 0 set in the mask)
+    tour = [1]  # Start city is 1 (0-indexed in code, 1-based in output)
+    
+    # Traverse the parent table to reconstruct the optimal tour
+    while True:
+        next_city = parent[mask][pos]  # Find the next city in the path
+        if next_city == -1:  # If no more cities to visit, break the loop
+            break
+        tour.append(next_city + 1)  # Convert to 1-based index for output
+        mask |= (1 << next_city)  # Mark the next city as visited in the mask
+        pos = next_city  # Move to the next city
+    
+    tour.append(1)  # Return to the starting city
+    print("Optimal Tour:", " -> ".join(map(str, tour)))
+
+def main():
+    """
+    Driver function to solve the TSP and print the results.
+    """
+    # Start the TSP from city 0 with only the starting city visited
+    min_cost = tsp(1, 0)
+    print(f"Minimum Travel Cost: {min_cost}")
+    print_tour()
+
+if __name__ == "__main__":
+    main()
+
