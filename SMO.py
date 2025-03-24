@@ -57,3 +57,32 @@ route = [x + 1 for x in route]  # Convert to 1-based city indices
 
 # Ensure starting city is City 1
 route = [1] + [city for city in route if city != 1] + [1]  # Start and end at City 1
+
+# STEP 5: Compute the total distance of the TSP route
+total_distance = sum(
+    graph[route[i] - 1][route[i + 1] - 1]
+    for i in range(len(route) - 1)
+)
+total_distance += graph[route[-1] - 1][route[0] - 1]  # Add distance to return to start
+
+# Output the results
+print("Optimal TSP Route:", " -> ".join(map(str, route)))
+print(f"Total Distance: {total_distance:.2f}")
+
+# STEP 6: Visualization
+plt.figure(figsize=(10, 10))
+plt.scatter(city_coords[:, 0], city_coords[:, 1], color='blue', label='Cities')
+for i, coord in enumerate(city_coords):
+    plt.text(coord[0] + 1, coord[1], f"City {i + 1}", fontsize=9)
+
+# Plot the TSP route
+route_coords = [city_coords[city - 1] for city in route]
+route_coords = np.array(route_coords)
+plt.plot(route_coords[:, 0], route_coords[:, 1], color='red', linestyle='-', marker='o', label='TSP Route')
+
+plt.title('TSP Visualization with SOM')
+plt.xlabel('X Coordinate')
+plt.ylabel('Y Coordinate')
+plt.legend()
+plt.grid(True)
+plt.show()
